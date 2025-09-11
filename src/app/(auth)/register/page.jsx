@@ -6,47 +6,62 @@ import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/auth-context';
 
 export default function RegisterPage() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const { setEmail: setAuthEmail, setName: setAuthName } = useAuth();
+  const router = useRouter();
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    setAuthName(name);
+    setAuthEmail(email);
+    router.push('/set-password');
+  };
 
   return (
-    <div className='min-h-screen flex flex-col bg-[#f1f8e9]'>
-      {/* Register Form */}
-      <div className='flex-1 flex flex-col lg:flex-row items-center justify-center p-4 sm:p-6 lg:p-8 gap-8'>
-        {/* Logo - Hidden on mobile */}
-        <div className='hidden lg:flex lg:w-1/2 xl:w-2/5 items-center justify-center'>
-          <Image
-            src='/EchoMarket-Logo.svg'
-            alt='Echomarket Logo'
-            width={400}
-            height={400}
-            className='w-[300px] h-[300px] xl:w-[400px] xl:h-[400px]'
-            priority
-          />
-        </div>
+    <div className='min-h-screen flex items-center justify-center bg-[#f1f8e9]'>
+      {/* Logo - Hidden on mobile */}
+      <div className='hidden lg:flex lg:flex-1 lg:w-1/2 xl:w-2/5 items-center justify-center'>
+        <Image
+          src='/logo/EchoMarket-Logo.svg'
+          alt='Echomarket Logo'
+          width={400}
+          height={400}
+          className='w-[300px] h-[300px] xl:w-[400px] xl:h-[400px]'
+          priority
+        />
+      </div>
 
-        {/* Form Card */}
-        <div className='w-full max-w-md lg:w-1/2 xl:w-2/5 flex justify-center'>
-          <Card className='w-full max-w-[400px]'>
-            <CardHeader className='text-center space-y-2 px-4 sm:px-6'>
-              <CardTitle className='text-2xl'>Daftar Sekarang</CardTitle>
-              <CardDescription>
-                Sudah punya akun Echomarket?{' '}
-                <Link href='/login' className='text-green-600 hover:underline'>
-                  Masuk
-                </Link>
-              </CardDescription>
-            </CardHeader>
+      {/* Form Card */}
+      <div className='flex-1 w-full max-w-md lg:max-w-full lg:h-full xl:w-2/5 flex justify-center bg-[url(/auth/register-background-1.svg)] bg-center bg-contain bg-no-repeat p-16'>
+        <Card className='w-full max-w-[400px] h-full relative overflow-hidden shadow-xl border-0 flex flex-col justify-center'>
+          <div className='absolute inset-0 bg-white/70'></div>
+          <CardHeader className='text-center space-y-2 px-4 sm:px-6 relative z-10'>
+            <CardTitle className='text-2xl'>Daftar Sekarang</CardTitle>
+            <CardDescription>
+              Sudah punya akun Echomarket?{' '}
+              <Link
+                href='/login'
+                className='text-green-600 hover:underline'>
+                Masuk
+              </Link>
+            </CardDescription>
+          </CardHeader>
 
-            <CardContent className='space-y-4 px-4 sm:px-6 pb-6'>
+          <CardContent className='space-y-4 px-4 sm:px-6 pb-6 relative z-10'>
+            <form
+              onSubmit={handleSubmit}
+              className='space-y-4'>
+              {/* Social Login Buttons can remain here */}
               {/* Social Login Buttons */}
               <div className='space-y-3'>
                 <Button
                   variant='outline'
-                  className='w-full h-11 border-gray-300 hover:bg-gray-50'
-                >
+                  className='w-full h-11 border-gray-300 hover:bg-gray-50 bg-white/90'>
                   <div className='flex items-center justify-center gap-2'>
                     <Image
                       src='/google-logo.svg'
@@ -60,8 +75,7 @@ export default function RegisterPage() {
 
                 <Button
                   variant='outline'
-                  className='w-full h-11 border-gray-300 hover:bg-gray-50'
-                >
+                  className='w-full h-11 border-gray-300 hover:bg-gray-50 bg-white/90'>
                   <div className='flex items-center justify-center gap-2'>
                     <Image
                       src='/facebook-logo.svg'
@@ -80,8 +94,20 @@ export default function RegisterPage() {
                   <div className='w-full border-t border-green-200'></div>
                 </div>
                 <div className='relative flex justify-center'>
-                  <span className='bg-white px-2 text-green-600 text-sm'>atau</span>
+                  <span className='bg-transparent px-2 text-green-600 text-sm'>atau</span>
                 </div>
+              </div>
+
+              {/* Name Input */}
+              <div className='space-y-1'>
+                <Input
+                  type='text'
+                  placeholder='Nama Lengkap'
+                  className='h-11 border-green-200 focus:border-green-500 bg-white/90'
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  required
+                />
               </div>
 
               {/* Email Input */}
@@ -89,16 +115,20 @@ export default function RegisterPage() {
                 <Input
                   type='email'
                   placeholder='Email'
-                  className='h-11 border-green-200 focus:border-green-500'
+                  className='h-11 border-green-200 focus:border-green-500 bg-white/90'
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
                 />
-                <p className='text-xs text-gray-500'>Contoh: email@Echomarket.com</p>
+                <p className='text-xs text-gray-500'>Contoh: email@echomarket.com</p>
               </div>
 
               {/* Register Button */}
               <Button
+                type='submit'
                 className='w-full h-11 bg-green-600 hover:bg-green-700 text-white'
-              >
-                Daftar
+                disabled={!email || !name}>
+                Lanjut
               </Button>
 
               {/* Terms and Conditions */}
@@ -107,9 +137,9 @@ export default function RegisterPage() {
                 <br />
                 Syarat dan Ketentuan serta Kebijakan dan Privasi Echomarket
               </p>
-            </CardContent>
-          </Card>
-        </div>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
