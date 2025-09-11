@@ -13,28 +13,28 @@ export default function StoreBanner() {
   const bannerSlides = [
     {
       id: 1,
-      title: "Belanja Sekarang, Bumi Ikut Senang!",
-      description: "Pilih barang daur ulang berkualitas, belanja cerdas sambil jaga lingkungan.",
-      buttonText: "Cek Sekarang",
-      gradient: "from-[rgba(58,126,61,1)] to-[rgba(170,255,14,1)]",
-      imageSrc: "/store.svg"
+      title: 'Belanja Sekarang, Bumi Ikut Senang!',
+      description: 'Pilih barang daur ulang berkualitas, belanja cerdas sambil jaga lingkungan.',
+      buttonText: 'Cek Sekarang',
+      gradient: 'from-[rgba(58,126,61,1)] to-[rgba(170,255,14,1)]',
+      imageSrc: '/store/banner-1.svg',
     },
     {
       id: 2,
-      title: "Hemat Belanja, Ramah Lingkungan",
-      description: "Dapatkan harga spesial untuk produk pilihan, hematnya terasa nyata.",
-      buttonText: "Cek Sekarang",
-      gradient: "from-blue-500 to-cyan-400",
-      imageSrc: "/store.svg"
+      title: 'Hemat Belanja, Ramah Lingkungan',
+      description: 'Dapatkan harga spesial untuk produk pilihan, hematnya terasa nyata.',
+      buttonText: 'Cek Sekarang',
+      gradient: 'from-blue-500 to-cyan-400',
+      imageSrc: '/store/banner-1.svg',
     },
     {
       id: 3,
-      title: "Belanja di EchoMall, Lebih Aman & Nyaman!",
-      description: "Nikmati produk pilihan dari penjual terpercaya dengan standar kualitas terbaik.",
-      buttonText: "Cek Sekarang",
-      gradient: "from-purple-500 to-pink-400",
-      imageSrc: "/store.svg"
-    }
+      title: 'Belanja di EchoMall, Lebih Aman & Nyaman!',
+      description: 'Nikmati produk pilihan dari penjual terpercaya dengan standar kualitas terbaik.',
+      buttonText: 'Cek Sekarang',
+      gradient: 'from-purple-500 to-pink-400',
+      imageSrc: '/store/banner-1.svg',
+    },
   ];
 
   const scrollNext = useCallback(() => {
