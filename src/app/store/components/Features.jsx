@@ -25,10 +25,10 @@ export default function StoreFeatures() {
   };
 
   const features = [
-    { icon: <Globe className='w-6 h-6' />, title: 'Echomunitas', color: 'bg-blue-50 text-blue-600' },
-    { icon: <ShoppingBag className='w-6 h-6' />, title: 'EchoJualan', color: 'bg-green-50 text-green-600' },
-    { icon: <List className='w-6 h-6' />, title: 'Daftar penjual', color: 'bg-gray-50 text-gray-600' },
-    { icon: <Bot className='w-6 h-6' />, title: 'Echobot', color: 'bg-purple-50 text-purple-600' },
+    { icon: <Globe className="w-6 h-6" />, title: "Echomunitas", color: "bg-blue-50 text-blue-600" },
+    { icon: <ShoppingBag className="w-6 h-6" />, title: "EchoJualan", color: "bg-green-50 text-green-600" },
+    { icon: <List className="w-6 h-6" />, title: "Daftar penjual", color: "bg-gray-50 text-gray-600" },
+    // { icon: <Bot className='w-6 h-6' />, title: 'Echobot', color: 'bg-purple-50 text-purple-600' },
   ];
 
   return (
