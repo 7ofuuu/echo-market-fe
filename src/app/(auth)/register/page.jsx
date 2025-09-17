@@ -12,11 +12,31 @@ import { useAuth } from '@/contexts/auth-context';
 export default function RegisterPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
   const { setEmail: setAuthEmail, setName: setAuthName } = useAuth();
   const router = useRouter();
 
+  const validateEmail = email => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
   const handleSubmit = e => {
     e.preventDefault();
+    setError('');
+
+    // Validate name length
+    if (name.length < 3) {
+      setError('Nama harus minimal 3 karakter');
+      return;
+    }
+
+    // Validate email format
+    if (!validateEmail(email)) {
+      setError('Format email tidak valid');
+      return;
+    }
+
     setAuthName(name);
     setAuthEmail(email);
     router.push('/set-password');
@@ -122,6 +142,9 @@ export default function RegisterPage() {
                 />
                 <p className='text-xs text-gray-500'>Contoh: email@echomarket.com</p>
               </div>
+
+              {/* Error Message */}
+              {error && <div className='text-red-500 text-sm text-center'>{error}</div>}
 
               {/* Register Button */}
               <Button

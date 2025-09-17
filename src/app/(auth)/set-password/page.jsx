@@ -31,13 +31,25 @@ export default function SetPasswordPage() {
     setIsLoading(true);
 
     try {
+      // Password validation
+      if (password.length < 8) {
+        setError('Password harus minimal 8 karakter');
+        return;
+      }
+
+      // Check for at least one number and one letter
+      if (!/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
+        setError('Password harus mengandung minimal satu huruf dan satu angka');
+        return;
+      }
+
       // 2. Prepare the request body
       const requestBody = {
         name: name,
         email: email,
         password: password,
         password_confirmation: confirmPassword,
-        role: '' // As per your example
+        role: 'customer', // Set default role to user
       };
 
       // 3. Make the API call
@@ -45,7 +57,7 @@ export default function SetPasswordPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify(requestBody),
       });
@@ -54,17 +66,28 @@ export default function SetPasswordPage() {
 
       // 4. Handle the response
       if (!response.ok) {
-        // If the server returns an error (e.g., validation failed)
-        // This assumes the API returns errors in a { message: '...' } or { errors: {...} } format
-        const errorMessage = data.message || 'Terjadi kesalahan. Silakan coba lagi.';
+        let errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
+
+        if (data.errors) {
+          // Handle validation errors from Laravel
+          const firstError = Object.values(data.errors)[0];
+          errorMessage = Array.isArray(firstError) ? firstError[0] : firstError;
+        } else if (data.message) {
+          errorMessage = data.message;
+        }
+
         setError(errorMessage);
         throw new Error(errorMessage);
       }
-      
-      // 5. Handle success
-      alert('Registrasi berhasil! Anda akan diarahkan ke halaman login.');
-      router.push('/store');
 
+      // 5. Handle success
+      // Clear stored registration data from localStorage
+      localStorage.removeItem('registerName');
+      localStorage.removeItem('registerEmail');
+
+      // Show success message and redirect to login
+      alert('Registrasi berhasil! Silakan login dengan akun baru Anda.');
+      router.push('/login');
     } catch (err) {
       // Handle network errors or errors from the !response.ok check
       console.error('Registration failed:', err);

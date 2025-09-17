@@ -7,19 +7,18 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation'; // Import useRouter for redirection
-// Assuming you have an AuthContext to store user data after login
-// import { useAuth } from '@/contexts/auth-context';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/auth-context';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [emailInput, setEmailInput] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null); // State for login errors
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
-  // const { setUserData } = useAuth(); // Example: to save user data in context
+  const { setName, setEmail } = useAuth();
 
   const handleLogin = async e => {
     e.preventDefault(); // Prevent default form submission
@@ -33,27 +32,28 @@ export default function LoginPage() {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: emailInput, password }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        // Handle errors from the API (e.g., incorrect credentials)
         setError(data.message || 'Login failed. Please check your credentials.');
-        return; // Stop the function execution
+        return;
       }
 
-      // --- LOGIN SUCCESSFUL ---
-
-      // 1. Store the authentication token (very important for future requests)
-      // The token is usually in data.token or data.access_token
+      // Login successful
       localStorage.setItem('authToken', data.token);
 
-      // 2. Optionally, store user data in a global context
-      // setUserData(data.user);
+      // Set user data in auth context
+      setName(data.user.name || emailInput.split('@')[0]);
+      setEmail(emailInput);
 
-      // 3. Redirect to the dashboard or home page
+      // Store in localStorage as backup
+      localStorage.setItem('registerName', data.user.name || emailInput.split('@')[0]);
+      localStorage.setItem('registerEmail', emailInput);
+
+      // Redirect to the profile page
       router.push('/store');
     } catch (err) {
       console.error('An error occurred during login:', err);
@@ -92,8 +92,8 @@ export default function LoginPage() {
                       placeholder='Email'
                       className='border-green-600 focus:border-green-500 focus-visible:ring-green-500 h-10 sm:h-11'
                       required
-                      value={email} // Bind value to state
-                      onChange={e => setEmail(e.target.value)} // Update state on change
+                      value={emailInput}
+                      onChange={e => setEmailInput(e.target.value)}
                     />
                     <span className='text-xs text-slate-600'>Contoh: email@echomarket.com</span>
                   </div>
