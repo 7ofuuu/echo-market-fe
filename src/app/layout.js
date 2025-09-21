@@ -1,6 +1,10 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from '@/contexts/auth-context';
+import { CartProvider } from "@/contexts/cart-context";
+import { Toaster } from "react-hot-toast";
+import { WishlistProvider } from "@/contexts/wishlist-context";
+import { CheckoutProvider } from "@/contexts/checkout-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,9 +23,18 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang='en'>
+    <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <CartProvider>
+            <WishlistProvider>
+              <CheckoutProvider>
+                {children}
+                <Toaster position="top-right" />
+              </CheckoutProvider>
+            </WishlistProvider>
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

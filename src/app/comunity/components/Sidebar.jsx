@@ -1,0 +1,51 @@
+export default function Sidebar() {
+  return (
+    <div className='col-span-3'>
+      <div className='bg-white rounded-xl shadow-sm border border-gray-100 sticky top-32'>
+        <div className='p-6 border-b border-gray-100'>
+          <h2 className='text-xl font-bold text-gray-900'>Echomunitas</h2>
+          <p className='text-sm text-gray-500 mt-1'>Komunitas eco-friendly</p>
+        </div>
+
+        <div className='p-4'>
+          <nav className='space-y-2'>
+            <button className='w-full text-left p-3 hover:bg-green-50 rounded-lg flex items-center gap-3 text-sm transition-colors'>
+              <div className='w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center'>
+                <span className='text-blue-600 text-sm'>🏪</span>
+              </div>
+              <span className='text-gray-700 font-medium'>Jelajahi barang</span>
+            </button>
+
+            <button className='w-full text-left p-3 hover:bg-green-50 rounded-lg flex items-center gap-3 text-sm transition-colors'>
+              <div className='w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center'>
+                <span className='text-orange-600 text-sm'>💬</span>
+              </div>
+              <span className='text-gray-700 font-medium'>Pesan</span>
+            </button>
+
+            <button className='w-full text-left p-3 bg-green-50 rounded-lg flex items-center gap-3 text-sm border-r-4 border-green-500'>
+              <div className='w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center'>
+                <span className='text-green-600 text-sm'>👥</span>
+              </div>
+              <span className='text-green-700 font-semibold'>Echomunitas</span>
+            </button>
+
+            <button className='w-full text-left p-3 hover:bg-green-50 rounded-lg flex items-center gap-3 text-sm transition-colors'>
+              <div className='w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center'>
+                <span className='text-purple-600 text-sm'>🛒</span>
+              </div>
+              <span className='text-gray-700 font-medium'>Echojualan</span>
+            </button>
+
+            <button className='w-full text-left p-3 hover:bg-green-50 rounded-lg flex items-center gap-3 text-sm transition-colors'>
+              <div className='w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center'>
+                <span className='text-gray-600 text-sm'>📋</span>
+              </div>
+              <span className='text-gray-700 font-medium'>Daftar sebagai penjual</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </div>
+  );
+}
