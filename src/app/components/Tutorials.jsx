@@ -1,7 +1,7 @@
 import { Package, BookOpen, Star } from 'lucide-react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-
+import { getApiUrl } from '@/config/api';
 import Image from 'next/image';
 
 export default function TutorialsComponent() {
@@ -12,7 +12,7 @@ export default function TutorialsComponent() {
   useEffect(() => {
     const fetchTutorials = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/tutorials');
+        const response = await axios.get(getApiUrl('tutorials'));
         setTutorials(response.data);
         setLoading(false);
         // console.log(response.data);

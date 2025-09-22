@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Star, Heart, ShoppingCart, MapPin, Truck, Clock, MessageCircle, Search, Bell, User, ChevronDown, Plus, Minus, Store } from "lucide-react";
 import { useParams } from "next/navigation";
 import axios from "axios";
-
+import { getApiUrl } from "@/config/api";
 import StoreNavbar from "@/components/shared/Navbar";
 import { useCart } from "@/contexts/cart-context";
 import { useRouter } from "next/navigation";
@@ -35,7 +35,7 @@ export default function EchoMarketProductPage() {
 
       try {
         // Fetch all products from API
-        const response = await axios.get("http://127.0.0.1:8000/api/products");
+        const response = await axios.get(getApiUrl("products"));
         const products = response.data.data;
 
         // Find product by ID
