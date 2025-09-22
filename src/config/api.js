@@ -1,6 +1,6 @@
 export const API_CONFIG = {
-  // Use environment variable if available, otherwise fallback to default
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api',
+  // Use environment variable if available
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 10000, // 10 seconds
   headers: {
     'Content-Type': 'application/json',
