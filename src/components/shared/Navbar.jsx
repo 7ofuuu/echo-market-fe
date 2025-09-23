@@ -40,7 +40,7 @@ export default function StoreNavbar() {
               onClick={() => router.push('/store')}
               className='w-10 h-10 rounded-full flex items-center justify-center cursor-pointer'>
               {/* <span className='text-white text-sm font-bold'>E</span> */}
-              <img
+              <Image
                 src='/logo/EchoMarket-logo-2.svg'
                 alt='EchoMarket Logo'
                 width={100}
