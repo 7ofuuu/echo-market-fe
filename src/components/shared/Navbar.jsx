@@ -41,7 +41,7 @@ export default function StoreNavbar() {
               className='w-10 h-10 rounded-full flex items-center justify-center cursor-pointer'>
               {/* <span className='text-white text-sm font-bold'>E</span> */}
               <Image
-                src='/logo/EchoMarket-logo-2.svg'
+                src='/logo/eco-logo.png'
                 alt='EchoMarket Logo'
                 width={100}
                 height={100}
