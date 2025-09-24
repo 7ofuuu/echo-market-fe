@@ -5,13 +5,6 @@ import { useEffect, useState } from 'react';
 import { getApiUrl } from '@/config/api';
 
 export default function ProductsComponent() {
-  // const products = [
-  //   { name: "Tempat Pensil", price: "Rp. 10.000", rating: 4.5 },
-  //   { name: "Tempat Pensil", price: "Rp. 10.000", rating: 4.8 },
-  //   { name: "Tempat Pensil", price: "Rp. 10.000", rating: 4.7 },
-  //   { name: "Tempat Pensil", price: "Rp. 10.000", rating: 4.6 }
-  // ];
-
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

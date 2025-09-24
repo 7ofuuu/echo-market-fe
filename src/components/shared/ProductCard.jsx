@@ -1,11 +1,18 @@
 import { MapPin, Star, Box } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/auth-context';
 
 export default function ProductCard({ product, isDiscounted = false }) {
   const router = useRouter();
+  const { name, email } = useAuth();
 
   const handleProductClick = () => {
-    router.push(`/product-detail/${product.id_product || product.id}`);
+    if (!name && !email) {
+      router.push('/login');
+      return;
+    } else {
+      router.push(`/product-detail/${product.id_product || product.id}`);
+    }
     console.log(product.id_product || product.id);
   };
   return (

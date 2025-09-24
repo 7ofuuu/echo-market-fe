@@ -3,11 +3,13 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { getApiUrl } from '@/config/api';
 import Image from 'next/image';
+import { useAuth } from '@/contexts/auth-context';
 
 export default function TutorialsComponent() {
   const [tutorials, setTutorials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { name, email } = useAuth();
 
   useEffect(() => {
     const fetchTutorials = async () => {

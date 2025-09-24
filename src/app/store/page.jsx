@@ -1,16 +1,10 @@
 'use client';
 
-import React from 'react';
-
-// import StoreNavbar from './components/Navbar';
-import StoreNavbar from '@/components/shared/Navbar';
 import HeroBanner from './components/Banner';
 import StoreFeatures from './components/Features';
 import Categories from './components/Categories';
 import StoreProducts from './components/Products';
-import FlashSale from "./components/FlashSale";
-
-
+import FlashSale from './components/FlashSale';
 
 export default function StorePage() {
   return (
