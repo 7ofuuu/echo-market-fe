@@ -1,46 +1,86 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MessageCircle, Plus, Camera, Video, ThumbsUp, Share, MoreHorizontal, Play } from 'lucide-react';
+import { useThread } from '@/contexts/thread-context';
+import { useAuth } from '@/contexts/auth-context';
 
 import StoreNavbar from '@/components/shared/Navbar';
 import Sidebar from './components/Sidebar';
 import ChallengeCard from './components/ChallengeCard';
+import CreateThreadForm from './components/CreateThreadForm';
+import ThreadCard from './components/ThreadCard';
 
 export default function EcoMarketCommunity() {
+  const { threads, loading, fetchThreads, createThread, updateThread, deleteThread } = useThread();
+  const { isAuthenticated } = useAuth();
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [editingThread, setEditingThread] = useState(null);
   const [postInput, setPostInput] = useState('');
 
-  const posts = [
-    {
-      id: 1,
-      author: 'Fauzein',
-      avatar: '👤',
-      content: 'Halo teman teman, rekomendasi aku cara membuat daur ulang dari kardus bekas',
-      image: '/api/placeholder/400/300',
-      likes: '1K',
-      comments: '60',
-      shares: '10',
-    },
-    {
-      id: 2,
-      author: 'Lian',
-      avatar: '👤',
-      content: 'Halo teman teman, Aku mau share tentang kerajinan yang aku buat hari ini nih. Bahan bahannya... Lihat selengkapnya',
-      images: ['/api/placeholder/150/150', '/api/placeholder/150/150', '/api/placeholder/150/150', '/api/placeholder/150/150', '/api/placeholder/150/150'],
-      likes: '1K',
-      comments: '60',
-      shares: '10',
-    },
-    {
-      id: 3,
-      author: 'Wawo',
-      avatar: '👤',
-      content: 'Halo teman teman, Aku mau share tentang kerajinan yang aku buat hari ini nih',
-      image: '/api/placeholder/400/300',
-      likes: null,
-      comments: null,
-      shares: null,
-    },
+  useEffect(() => {
+    fetchThreads();
+  }, [fetchThreads]);
+
+  const handleCreateSubmit = async data => {
+    try {
+      await createThread(data);
+      setShowCreateForm(false);
+    } catch (error) {
+      console.error('Failed to create thread:', error);
+    }
+  };
+
+  const handleEditSubmit = async data => {
+    try {
+      await updateThread(editingThread.id, data);
+      setEditingThread(null);
+    } catch (error) {
+      console.error('Failed to update thread:', error);
+    }
+  };
+
+  const handleDelete = async id => {
+    if (window.confirm('Are you sure you want to delete this thread?')) {
+      try {
+        await deleteThread(id);
+      } catch (error) {
+        console.error('Failed to delete thread:', error);
+      }
+    }
+  };
+
+  const staticPosts = [
+    // {
+    //   id: 1,
+    //   author: 'Fauzein',
+    //   avatar: '👤',
+    //   content: 'Halo teman teman, rekomendasi aku cara membuat daur ulang dari kardus bekas',
+    //   image: '/api/placeholder/400/300',
+    //   likes: '1K',
+    //   comments: '60',
+    //   shares: '10',
+    // },
+    // {
+    //   id: 2,
+    //   author: 'Lian',
+    //   avatar: '👤',
+    //   content: 'Halo teman teman, Aku mau share tentang kerajinan yang aku buat hari ini nih. Bahan bahannya... Lihat selengkapnya',
+    //   images: ['/api/placeholder/150/150', '/api/placeholder/150/150', '/api/placeholder/150/150', '/api/placeholder/150/150', '/api/placeholder/150/150'],
+    //   likes: '1K',
+    //   comments: '60',
+    //   shares: '10',
+    // },
+    // {
+    //   id: 3,
+    //   author: 'Wawo',
+    //   avatar: '👤',
+    //   content: 'Halo teman teman, Aku mau share tentang kerajinan yang aku buat hari ini nih',
+    //   image: '/api/placeholder/400/300',
+    //   likes: null,
+    //   comments: null,
+    //   shares: null,
+    // },
   ];
 
   const tutorialVideos = [
@@ -65,53 +105,7 @@ export default function EcoMarketCommunity() {
       <div className='max-w-7xl mx-auto pt-32 pb-8 px-4'>
         <div className='grid grid-cols-12 gap-6'>
           {/* Left Sidebar - Navigation */}
-          {/* <div className='col-span-3'>
-            <div className='bg-white rounded-xl shadow-sm border border-gray-100 sticky top-32'>
-              <div className='p-6 border-b border-gray-100'>
-                <h2 className='text-xl font-bold text-gray-900'>Echomunitas</h2>
-                <p className='text-sm text-gray-500 mt-1'>Komunitas eco-friendly</p>
-              </div>
 
-              <div className='p-4'>
-                <nav className='space-y-2'>
-                  <button className='w-full text-left p-3 hover:bg-green-50 rounded-lg flex items-center gap-3 text-sm transition-colors'>
-                    <div className='w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center'>
-                      <span className='text-blue-600 text-sm'>🏪</span>
-                    </div>
-                    <span className='text-gray-700 font-medium'>Jelajahi barang</span>
-                  </button>
-
-                  <button className='w-full text-left p-3 hover:bg-green-50 rounded-lg flex items-center gap-3 text-sm transition-colors'>
-                    <div className='w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center'>
-                      <span className='text-orange-600 text-sm'>💬</span>
-                    </div>
-                    <span className='text-gray-700 font-medium'>Pesan</span>
-                  </button>
-
-                  <button className='w-full text-left p-3 bg-green-50 rounded-lg flex items-center gap-3 text-sm border-r-4 border-green-500'>
-                    <div className='w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center'>
-                      <span className='text-green-600 text-sm'>👥</span>
-                    </div>
-                    <span className='text-green-700 font-semibold'>Echomunitas</span>
-                  </button>
-
-                  <button className='w-full text-left p-3 hover:bg-green-50 rounded-lg flex items-center gap-3 text-sm transition-colors'>
-                    <div className='w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center'>
-                      <span className='text-purple-600 text-sm'>🛒</span>
-                    </div>
-                    <span className='text-gray-700 font-medium'>Echojualan</span>
-                  </button>
-
-                  <button className='w-full text-left p-3 hover:bg-green-50 rounded-lg flex items-center gap-3 text-sm transition-colors'>
-                    <div className='w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center'>
-                      <span className='text-gray-600 text-sm'>📋</span>
-                    </div>
-                    <span className='text-gray-700 font-medium'>Daftar sebagai penjual</span>
-                  </button>
-                </nav>
-              </div>
-            </div>
-          </div> */}
           <Sidebar />
           {/* Main Feed */}
           <div className='col-span-6 space-y-6'>
@@ -127,7 +121,12 @@ export default function EcoMarketCommunity() {
                     placeholder='Apa yang ingin pikiranmu hari ini?'
                     value={postInput}
                     onChange={e => setPostInput(e.target.value)}
-                    className='w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-500'
+                    onFocus={() => {
+                      if (isAuthenticated) {
+                        setShowCreateForm(true);
+                      }
+                    }}
+                    className='w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder-gray-500 cursor-pointer'
                   />
                   <div className='flex justify-between items-center mt-4'>
                     <div className='flex gap-6'>
@@ -140,9 +139,13 @@ export default function EcoMarketCommunity() {
                         <span>Tambahkan Video</span>
                       </button>
                     </div>
-                    <button className='bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium'>
-                      <Plus className='w-5 h-5' />
-                    </button>
+                    {isAuthenticated && (
+                      <button
+                        onClick={() => setShowCreateForm(false)}
+                        className={`bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center gap-2 ${!showCreateForm ? 'hidden' : ''}`}>
+                        <span>Cancel</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -209,8 +212,47 @@ export default function EcoMarketCommunity() {
               </div>
             </div>
 
-            {/* Posts */}
-            {posts.map(post => (
+            {/* Thread Creation Form */}
+            {isAuthenticated && !editingThread && showCreateForm && (
+              <div className='bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6'>
+                <CreateThreadForm onSubmit={handleCreateSubmit} />
+              </div>
+            )}
+
+            {editingThread && (
+              <div className='bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6'>
+                <h2 className='text-xl mb-4'>Edit Thread</h2>
+                <CreateThreadForm
+                  initialData={editingThread}
+                  onSubmit={handleEditSubmit}
+                />
+                <button
+                  onClick={() => setEditingThread(null)}
+                  className='mt-4 text-gray-600 hover:text-gray-800'>
+                  Cancel Edit
+                </button>
+              </div>
+            )}
+
+            {/* API Threads */}
+            {loading ? (
+              <div className='text-center py-8'>Loading threads...</div>
+            ) : (
+              threads.map(thread => (
+                <ThreadCard
+                  key={thread.id}
+                  thread={thread}
+                  onEdit={thread => {
+                    setShowCreateForm(false);
+                    setEditingThread(thread);
+                  }}
+                  onDelete={handleDelete}
+                />
+              ))
+            )}
+
+            {/* Static Posts */}
+            {staticPosts.map(post => (
               <div
                 key={post.id}
                 className='bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden'>

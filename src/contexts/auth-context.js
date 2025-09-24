@@ -6,20 +6,48 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext(undefined);
 
 export function AuthProvider({ children }) {
-  const [name, setName] = useState(''); // Added: State for the user's name
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [userData, setUserData] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState(null);
+
+  // Load token from localStorage only on client side
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedToken = localStorage.getItem('authToken');
+      setToken(storedToken);
+      setIsAuthenticated(!!storedToken);
+    }
+  }, []);
+
+  // Update token in localStorage when it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (token) {
+        localStorage.setItem('authToken', token);
+        setIsAuthenticated(true);
+      } else {
+        localStorage.removeItem('authToken');
+        setIsAuthenticated(false);
+      }
+    }
+  }, [token]);
 
   // Load name and email from localStorage on component mount
   useEffect(() => {
     const storedName = localStorage.getItem('registerName');
     const storedEmail = localStorage.getItem('registerEmail');
+    const token = localStorage.getItem('authToken');
+
     if (storedName) {
       setName(storedName);
     }
     if (storedEmail) {
       setEmail(storedEmail);
     }
+    // Set authentication state based on token presence
+    setIsAuthenticated(!!token);
   }, []);
 
   // Update localStorage when name changes
@@ -40,14 +68,17 @@ export function AuthProvider({ children }) {
     }
   }, [email]);
   
-  // Modified: Added name and setName to the provider value
   const value = {
-    name, 
+    name,
     setName,
     email,
     setEmail,
     userData,
-    setUserData
+    setUserData,
+    isAuthenticated,
+    setIsAuthenticated,
+    token,
+    setToken,
   };
 
   return (

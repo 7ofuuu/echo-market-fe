@@ -18,7 +18,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
-  const { setName, setEmail } = useAuth();
+  const { setName, setEmail, setToken, setIsAuthenticated } = useAuth();
 
   const handleLogin = async e => {
     e.preventDefault(); // Prevent default form submission
@@ -43,15 +43,16 @@ export default function LoginPage() {
       }
 
       // Login successful
-      localStorage.setItem('authToken', data.token);
+      console.log('Login response:', data);
 
-      // Set user data in auth context
-      setName(data.user.name || emailInput.split('@')[0]);
-      setEmail(emailInput);
+      // Set auth state using context
+      setToken(data.access_token);
+      setIsAuthenticated(true);
+      setName(data.user.name);
+      setEmail(data.user.email);
 
-      // Store in localStorage as backup
-      localStorage.setItem('registerName', data.user.name || emailInput.split('@')[0]);
-      localStorage.setItem('registerEmail', emailInput);
+      // Store user data in localStorage
+      localStorage.setItem('userData', JSON.stringify(data.user));
 
       // Redirect to the profile page
       router.push('/store');
