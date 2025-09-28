@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { MessageCircle, Plus, Camera, Video, ThumbsUp, Share, MoreHorizontal, Play } from 'lucide-react';
 import { useThread } from '@/contexts/thread-context';
 import { useAuth } from '@/contexts/auth-context';
+import { ChallengeProvider, useChallenge } from '@/contexts/challenge-context';
 
 import StoreNavbar from '@/components/shared/Navbar';
 import Sidebar from './components/Sidebar';
@@ -14,9 +15,10 @@ import ThreadCard from './components/ThreadCard';
 import StoryComponent from './components/Story';
 import TutorialComponent from './components/Tutorial';
 
-export default function EcoMarketCommunity() {
+function CommunityContent() {
   const { threads, loading, fetchThreads, createThread, deleteThread } = useThread();
   const { isAuthenticated } = useAuth();
+  const { notifyThreadCreated } = useChallenge();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [postInput, setPostInput] = useState('');
 
@@ -28,6 +30,8 @@ export default function EcoMarketCommunity() {
     try {
       await createThread(data);
       setShowCreateForm(false);
+      // Notify challenge system about thread creation
+      notifyThreadCreated();
     } catch (error) {
       console.error('Failed to create thread:', error);
     }
@@ -256,5 +260,13 @@ export default function EcoMarketCommunity() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function EcoMarketCommunity() {
+  return (
+    <ChallengeProvider>
+      <CommunityContent />
+    </ChallengeProvider>
   );
 }
