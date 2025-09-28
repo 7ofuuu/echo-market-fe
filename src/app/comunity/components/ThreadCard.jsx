@@ -12,6 +12,45 @@ export default function ThreadCard({ thread, onDelete }) {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(thread.likes || 0);
 
+  // Function to format relative time
+  const getRelativeTime = dateString => {
+    const now = new Date();
+    const createdAt = new Date(dateString);
+    const diffInSeconds = Math.floor((now - createdAt) / 1000);
+
+    if (diffInSeconds < 60) {
+      return 'sekarang';
+    }
+
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) {
+      return `${diffInMinutes} menit yang lalu`;
+    }
+
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) {
+      return `${diffInHours} jam yang lalu`;
+    }
+
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 7) {
+      return `${diffInDays} hari yang lalu`;
+    }
+
+    const diffInWeeks = Math.floor(diffInDays / 7);
+    if (diffInWeeks < 4) {
+      return `${diffInWeeks} minggu yang lalu`;
+    }
+
+    const diffInMonths = Math.floor(diffInDays / 30);
+    if (diffInMonths < 12) {
+      return `${diffInMonths} bulan yang lalu`;
+    }
+
+    const diffInYears = Math.floor(diffInDays / 365);
+    return `${diffInYears} tahun yang lalu`;
+  };
+
   const isOwner = user?.id === thread.user_id;
   const hasImage = thread.image !== null;
   const contentPreviewLength = 150;
@@ -45,7 +84,7 @@ export default function ThreadCard({ thread, onDelete }) {
           </div>
           <div>
             <span className='font-semibold text-gray-900'>{thread.user?.name || 'Anonymous'}</span>
-            <p className='text-sm text-gray-500'>{new Date(thread.created_at).toLocaleDateString()}</p>
+            <p className='text-sm text-gray-500'>{getRelativeTime(thread.created_at)}</p>
           </div>
         </div>
 
