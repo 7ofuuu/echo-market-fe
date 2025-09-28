@@ -5,6 +5,7 @@ import { CartProvider } from "@/contexts/cart-context";
 import { Toaster } from "react-hot-toast";
 import { WishlistProvider } from "@/contexts/wishlist-context";
 import { CheckoutProvider } from "@/contexts/checkout-context";
+import { ThreadProvider } from '@/contexts/thread-context';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,14 +24,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AuthProvider>
           <CartProvider>
             <WishlistProvider>
               <CheckoutProvider>
-                {children}
-                <Toaster position="top-right" />
+                <ThreadProvider>
+                  {children}
+                  <Toaster position='top-right' />
+                </ThreadProvider>
               </CheckoutProvider>
             </WishlistProvider>
           </CartProvider>
