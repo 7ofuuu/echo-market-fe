@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { useAuth } from '@/contexts/auth-context';
 import { useRouter } from 'next/navigation';
+import RegistrationSuccessModal from '../components/RegistrationSuccessModal';
 
 export default function SetPasswordPage() {
   const [password, setPassword] = useState('');
@@ -15,10 +16,11 @@ export default function SetPasswordPage() {
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const { name, email } = useAuth(); // Get name and email from context
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setError(null); // Clear previous errors
 
@@ -85,9 +87,8 @@ export default function SetPasswordPage() {
       localStorage.removeItem('registerName');
       localStorage.removeItem('registerEmail');
 
-      // Show success message and redirect to login
-      alert('Registrasi berhasil! Silakan login dengan akun baru Anda.');
-      router.push('/login');
+      // Show success modal
+      setShowSuccessModal(true);
     } catch (err) {
       // Handle network errors or errors from the !response.ok check
       console.error('Registration failed:', err);
@@ -105,14 +106,14 @@ export default function SetPasswordPage() {
       {/* Logo - Hidden on mobile */}
       <div className='hidden lg:flex lg:flex-1 lg:w-1/2 xl:w-2/5 items-center justify-center'>
         {/* ... your image ... */}
-         <Image
+        <Image
           src='/auth/register-image.svg'
           alt='Echomarket Logo'
           width={400}
           height={400}
           className='w-[300px] h-[300px] xl:w-[400px] xl:h-[400px]'
           priority
-        /> 
+        />
       </div>
 
       {/* Form Card */}
@@ -136,7 +137,7 @@ export default function SetPasswordPage() {
                   placeholder='Password'
                   className='h-11 border-green-200 focus:border-green-500 bg-white/90 pr-16' // Added padding-right
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
                   required
                 />
                 {/* Added: Show/Hide button */}
@@ -149,7 +150,7 @@ export default function SetPasswordPage() {
                   {showPassword ? 'Sembunyikan' : 'Lihat'}
                 </Button>
               </div>
-              
+
               {/* Confirm Password Input */}
               <div className='relative space-y-1 mb-6'>
                 <Input
@@ -158,7 +159,7 @@ export default function SetPasswordPage() {
                   placeholder='Konfirmasi Password'
                   className='h-11 border-green-200 focus:border-green-500 bg-white/90 pr-16' // Added padding-right
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={e => setConfirmPassword(e.target.value)}
                   required
                 />
                 {/* Added: Show/Hide button */}
@@ -172,13 +173,11 @@ export default function SetPasswordPage() {
                 </Button>
               </div>
               {/* Display Error Message */}
-              {error && (
-                  <p className='text-sm text-red-600 text-center mb-4'>{error}</p>
-              )}
+              {error && <p className='text-sm text-red-600 text-center mb-4'>{error}</p>}
 
               {/* Register Button */}
               <Button
-                type="submit"
+                type='submit'
                 className='w-full h-11 bg-green-600 hover:bg-green-700 text-white mb-4'
                 disabled={isLoading || !password || !confirmPassword}>
                 {isLoading ? 'Mendaftar...' : 'Daftar'}
@@ -190,6 +189,16 @@ export default function SetPasswordPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Registration Success Modal */}
+      <RegistrationSuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        onLogin={() => {
+          setShowSuccessModal(false);
+          router.push('/login');
+        }}
+      />
     </div>
   );
 }
