@@ -18,18 +18,26 @@ import StoreNavbar from '@/components/shared/Navbar';
 export default function EchoMarketAccount() {
   const router = useRouter();
   const { name, email, setName, setEmail } = useAuth();
-  
+  const { token } = useAuth();
+
+  // useEffect(() => {
+  //   // Check if user is logged in
+  //   if (!name && !email) {
+  //     router.push('/login');
+  //   }
+  // }, [name, email, router]);
+
   useEffect(() => {
     // Check if user is logged in
-    if (!name && !email) {
+    if (!token) {
       router.push('/login');
     }
-  }, [name, email, router]);
+  }, [token, router]);
 
   const handleLogout = () => {
     // Clear auth context
-    setName('');
-    setEmail('');
+    // setName('');
+    // setEmail('');
     // Clear localStorage
     localStorage.removeItem('registerName');
     localStorage.removeItem('registerEmail');
@@ -110,13 +118,12 @@ export default function EchoMarketAccount() {
                   </TabsTrigger>
                 );
               })}
-              
-              <div className="mt-4 pt-4 ">
+
+              <div className='mt-4 pt-4 '>
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors justify-start hover:cursor-pointer hover:bg-red-50 hover:text-red-700 text-red-600"
-                >
-                  <LogOut className="w-4 h-4" />
+                  className='w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors justify-start hover:cursor-pointer hover:bg-red-50 hover:text-red-700 text-red-600'>
+                  <LogOut className='w-4 h-4' />
                   Keluar
                 </button>
               </div>
