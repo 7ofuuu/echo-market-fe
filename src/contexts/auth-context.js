@@ -15,9 +15,34 @@ export function AuthProvider({ children }) {
   // Load token from localStorage only on client side
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const storedToken = localStorage.getItem('authToken');
-      setToken(storedToken);
-      setIsAuthenticated(!!storedToken);
+      const checkToken = () => {
+        const storedToken = localStorage.getItem('authToken');
+        const storedTimestamp = localStorage.getItem('authTokenTimestamp');
+        const currentTime = Date.now();
+
+        if (storedToken && storedTimestamp) {
+          const timeDiff = currentTime - parseInt(storedTimestamp, 10);
+          if (timeDiff < 120000) { // 2 minutes in milliseconds
+            setToken(storedToken);
+            setIsAuthenticated(true);
+          } else {
+            // Token expired, remove it
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('authTokenTimestamp');
+            setToken(null);
+            setIsAuthenticated(false);
+          }
+        } else {
+          setToken(null);
+          setIsAuthenticated(false);
+        }
+      };
+
+      checkToken(); // Check immediately
+
+      const interval = setInterval(checkToken, 30000); // Check every 30 seconds
+
+      return () => clearInterval(interval); // Cleanup on unmount
     }
   }, []);
 
@@ -26,9 +51,11 @@ export function AuthProvider({ children }) {
     if (typeof window !== 'undefined') {
       if (token) {
         localStorage.setItem('authToken', token);
+        localStorage.setItem('authTokenTimestamp', Date.now().toString());
         setIsAuthenticated(true);
       } else {
         localStorage.removeItem('authToken');
+        localStorage.removeItem('authTokenTimestamp');
         setIsAuthenticated(false);
       }
     }
@@ -38,7 +65,6 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const storedName = localStorage.getItem('registerName');
     const storedEmail = localStorage.getItem('registerEmail');
-    const token = localStorage.getItem('authToken');
 
     if (storedName) {
       setName(storedName);
@@ -46,8 +72,6 @@ export function AuthProvider({ children }) {
     if (storedEmail) {
       setEmail(storedEmail);
     }
-    // Set authentication state based on token presence
-    setIsAuthenticated(!!token);
   }, []);
 
   // Update localStorage when name changes
