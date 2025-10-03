@@ -32,7 +32,7 @@ export default function StoreProducts() {
         <h2 className='text-xl font-semibold text-gray-800 mb-6'>Rekomendasi Untukmu</h2>
 
         <div className='grid grid-cols-2 md:grid-cols-5 gap-4'>
-          {products.map((product, index) => (
+          {products.slice(19, 40).map((product, index) => (
             <ProductCard
               key={index}
               product={product}
